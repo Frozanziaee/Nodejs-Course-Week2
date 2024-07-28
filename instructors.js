@@ -3,10 +3,13 @@ const app = express()
 
 const { instructors, courses } = require("./data")
 
+//**if there are instructors:**
 app.get('/', (req, res) => {
-   res.status(200).json(instructors)
+   res.status(200).json({instructors})
 })
 
+
+//**if an instructor with provided id exits:**
 app.get("/:id", (req, res) => {
   const id = req.params.id
   const instructor = instructors.find((instr) => instr.instructor_id == id)
@@ -18,6 +21,7 @@ app.get("/:id", (req, res) => {
   }
 })
 
+//**if instrutor is associated with provided course id:**
 app.get("/:id/courses/:courseId", (req, res) => {
   const id = req.params.id
   const courseId = req.params.courseId
@@ -40,6 +44,7 @@ app.get("/:id/courses/:courseId", (req, res) => {
   }
 })
 
+//**if any number of instructors found with provided department:**
 app.get("/instructors/query", (req, res) => {
   console.log (req.query)
   const departmentFilter = req.query.department ? req.query.department.split(",") : null
@@ -59,6 +64,10 @@ app.get("/instructors/query", (req, res) => {
   res.status(200).json({ instructors: filteredInstructors })
 })
 
-app.listen(3000, () => {
-  console.log("Server is lestening on port 3000...")
+app.listen(3000, (error) => {
+  if (!error)
+    console.log(
+      "Server is Successfully Running, and App is listening on port " + 3000
+    )
+  else console.log("Error occurred, server can't start", error)
 })
